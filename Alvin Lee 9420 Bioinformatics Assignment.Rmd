@@ -1,0 +1,91 @@
+---
+title: "Advanced Bioinformatics 2019 assessment"
+author: '9420'
+date: "03/05/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#3.1 Using the sum() function and : operator, write an expression in the code snippet to evaluate the sum of all integers between 5 and 55. (5pt)
+```{r 3.1}
+sum(5:55)
+```
+
+
+#3.2 Write a function called sumfun with one input parameter, called n, that calculates the sum of all integers between 5 and n. Use the function to do the calculation for n = 10, n = 20, and n = 100 and present the results. 
+```{r 3.2}
+sumfun <- function(x){sum(5:x)}
+sumfun(10)
+sumfun(20)
+sumfun(100)
+```
+
+
+#3.3. The famous Fibonacci series is calculated as the sum of the two preceding members of the sequence, where the first two steps in the sequence are 1, 1. Write an R script using a for loop to calculate and print out the first 12 entries of the Fibonacci series. 
+
+```{r 3.3}
+Fibonacci <- numeric(12)
+Fibonacci[1] <- Fibonacci[2] <- 1
+for (i in 3:12) Fibonacci[i] <- Fibonacci[i - 2] + Fibonacci[i - 1]
+print("First 12 Fibonacci numbers:")
+print(Fibonacci)
+```
+
+
+#3.4. With the mtcars dataset bundled with R, use ggplot to generate a box of miles per gallon (in the variable mpg) as a function of the number of gears (in the variable gear). Use the fill aesthetic to colour bars by number of gears. 
+```{r 3.4}
+library(ggplot2)
+data(mtcars)
+
+BoxplotCars<-ggplot()
+BoxplotCars<-BoxplotCars+geom_boxplot(data=mtcars, aes(x=factor(gear), y=mpg, fill=factor(gear))) + 
+geom_boxplot()+ ggtitle("Mileage by Gear Number") +
+             theme(plot.title = element_text(size=20, face="bold"))+     
+             labs(x = "", y="Miles per Gallon")+ scale_fill_discrete(name="Gear",
+                         breaks=c("3gears", "4gears", "5gears"),    
+                         labels=c("3 Gear", "4 Gear", "5 Gear"))
+
+BoxplotCars
+
+
+
+
+```
+
+
+#3.5. Using the cars dataset and the function lm, fit a linear relationship between speed and breaking distance in the variable distance. What are the fitted slope and intercept of the line, and their standard errors? What are the units used for the variables in the dataset? 
+
+```{r 3.5}
+data(cars)
+cars.lm <- lm(dist~speed, data=cars)
+cars.lm
+summary(cars.lm)
+```
+
+#3.6. Use ggplot to plot the data points from Task 6 and the linear fit. 
+
+```{r 3.6}
+ggplot(cars, aes(speed, dist)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+#3.7. Again using the cars dataset, now use linear regression (lm) to estimate the average reaction time for the driver to start breaking (in seconds). To simplify matters you may assume that once breaking commences, breaking distance is proportional to the square of the speed. Explain the steps in your analysis. Do you get reasonable results? Finally, use ggplot to plot the data points and the fitted relationship. 
+
+```{r 3.7}
+cars2 <- transform(cars, speed2=speed^2)
+cars2.lm <- lm(dist~speed2, data=cars2)
+cars2.lm
+
+#intercept is 8.86, which is average reaction time as when speed squared = 0
+
+ggplot(cars2, aes(speed2, dist)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
